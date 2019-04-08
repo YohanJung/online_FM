@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # print(inputs_matrix)
 
 
-    recent_num = 5000
+    recent_num = 1000
 
     Model = SFTRL(inputs_matrix[:recent_num ,:] ,outputs[:recent_num] ,options)
     pred ,real = Model.online_learning()

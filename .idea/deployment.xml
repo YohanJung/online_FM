@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="torch_SFTRL" autoUploadExternalChanges="true">
+  <component name="PublishConfigData" autoUpload="Always" serverName="yohan@143.248.92.34:2000" autoUploadExternalChanges="true">
     <serverData>
-      <paths name="torch_SFTRL">
+      <paths name="yohan@143.248.92.34:2000">
         <serverdata>
           <mappings>
-            <mapping deploy="/Yohan/Line_Project/FM_torch" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/yohan/Yohan/Line_Project/FM_torch" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
