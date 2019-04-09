@@ -1,6 +1,9 @@
 
+import torch
+import time
 from data_manager import *
-from SFTRL import SFTRL
+from SFTRL_CCFM import SFTRL_CCFM
+from SFTRL_Vanila import SFTRL_Vanila
 from peformance_manager import *
 
 
@@ -24,13 +27,14 @@ if __name__ == "__main__":
     # sort dataset in time
     x_train_s, rate_train_s, _ = sort_dataset(x_train, rate_train, timestamp_train)
 
+    #print(x_train[0:x_train_s.size:100])
+    #print(rate_train_s[0:rate_train_s.size:100])
 
-    #print(x_train)
+    down_sampling = 10
 
     # sparse to dense
-    inputs_matrix = torch.tensor(x_train_s.todense()).double()
-    outputs = torch.tensor(rate_train_s).double()
-
+    inputs_matrix = torch.tensor(x_train_s[0:x_train_s.size:down_sampling].todense()).double()
+    outputs = torch.tensor(rate_train_s[0:x_train_s.size:down_sampling]).double()
 
 
     # model setup
@@ -39,29 +43,45 @@ if __name__ == "__main__":
     options['eta'] = 5e-2
     options['task'] = 'reg'
 
+    options2 = {}
+    options2['m']  = 10
+    options2['eta'] = 5e-2
+    options2['task'] = 'reg'
+
+
     # print(inputs_matrix)
+    recent_num = -1
+    Model_CCFM = SFTRL_CCFM(inputs_matrix[:recent_num ,:] ,outputs[:recent_num] ,options)
+    Model_Vanila = SFTRL_Vanila(inputs_matrix[:recent_num ,:] ,outputs[:recent_num] ,options)
 
 
-    recent_num = 1000
+    pred_C , real = Model_CCFM.online_learning()
+    pred_V, _ = Model_Vanila.online_learning()
 
-    Model = SFTRL(inputs_matrix[:recent_num ,:] ,outputs[:recent_num] ,options)
-    pred ,real = Model.online_learning()
 
-    fig = plt.figure()
-    plt.plot(pred,'b.')
-    plt.plot(real,'r.')
-    plt.savefig('./Figure/demo.png')
-    plt.show()
+    reg_metric_C = regression_metric(pred_C, real)
+    reg_metric_V = regression_metric(pred_V, real)
 
-    #reg_metric = regression_metric(pred, real)
+
+    fig_prediction(pred_C, pred_V, real)
+
+    fig_metric_reg(reg_metric_C, reg_metric_V)
 
 
     # fig = plt.figure()
-    # fig.add_subplot(1,2,1)
-    # plt.plot(pred,'b.')
-    # plt.plot(real,'r.')
-    #
-    # fig.add_subplot(1,2,2)
-    # plt.plot(reg_metric)
-    # plt.savefig('./Figure/demo.png')
+    # plt.plot(pred_C,'b.',label = 'S_CCFM')
+    # plt.plot(pred_V, 'g.',label = 'V_FM')
+    # plt.plot(real,'r.',label = 'real')
+    # plt.title('prediction')
+    # plt.savefig('./Figure/exp_reg_' + time.ctime() +'.png')
     # plt.show()
+    #
+    #
+    # fig = plt.figure()
+    # plt.plot(reg_metric_C,'b',label = 'S_CCFM')
+    # plt.plot(reg_metric_V,'g',label = 'V_FM')
+    # plt.legend()
+    # plt.savefig('./Figure/metric_reg_' + time.ctime() +'.png')
+    # plt.show()
+
+
