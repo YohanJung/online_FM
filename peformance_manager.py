@@ -5,21 +5,17 @@ import matplotlib.pyplot as plt
 
 
 def regression_metric(pred,real):
-
-
     val = torch.tensor([0]).double()
     metric = []
     for idx,(pred_idx,real_idx) in enumerate(zip(pred,real)):
-
         val += (pred_idx - real_idx)**2
         metric.append(1 / (idx + 1) * val)
-
     metric = np.asarray(metric).reshape([-1,1])
 
     return metric
 
-def classfication_metric():
 
+def classfication_metric():
     return
 
 
