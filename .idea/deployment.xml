@@ -5,7 +5,7 @@
       <paths name="yohan@143.248.92.34:2000">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/yohan/Yohan/Line_Project/FM_torch" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/yohan/Working/Line_Project/FM_torch" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
