@@ -105,7 +105,8 @@ class SFTRL_Vanila(Module):
                 idx, scalar, self.b[idx], self._loss(scalar - self.b[idx])))
 
 
-        return torch.tensor(pred_list).reshape([-1,1]).double(), real_list
+        return np.asarray(pred_list),np.asarray(real_list)
+
 
 
 

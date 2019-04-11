@@ -98,7 +98,7 @@ class SFTRL_CCFM(Module):
         # return torch.tensor(pred_list).reshape([-1,1]).double(),\
         #        torch.tensor(np.asarray(real_list).reshape[-1,1]).double()
 
-        return pred_list,real_list
+        return np.asarray(pred_list),np.asarray(real_list)
 
 
     def _GFD(self, sign, alpha):

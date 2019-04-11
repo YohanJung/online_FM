@@ -22,7 +22,7 @@ if __name__ == "__main__":
     x_train_s, rate_train_s, _ = sort_dataset(x_train, rate_train, timestamp_train)
 
 
-    down_sampling = 10
+    down_sampling = 20
     # sparse to dense
     inputs_matrix = torch.tensor(x_train_s[0:x_train_s.size:down_sampling].todense()).double()
     outputs = torch.tensor(rate_train_s[0:x_train_s.size:down_sampling]).double()
@@ -31,12 +31,12 @@ if __name__ == "__main__":
     # model setup
     options = {}
     options['m']  = 10
-    options['eta'] = 5e-2
+    options['eta'] = 1e-1
     options['task'] = 'reg'
 
     options2 = {}
     options2['m']  = 10
-    options2['eta'] = 5e-2
+    options2['eta'] = 1e-1
     options2['task'] = 'reg'
 
 
@@ -47,8 +47,11 @@ if __name__ == "__main__":
     pred_C , real = Model_CCFM.online_learning()
     pred_V, _ = Model_Vanila.online_learning()
 
+
+
     reg_metric_C = regression_metric(pred_C, real)
     reg_metric_V = regression_metric(pred_V, real)
+
 
 
     fig_prediction(pred_C, pred_V, real)
