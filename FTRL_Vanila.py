@@ -16,6 +16,11 @@ numpy_type = np.float64
 # Ad Click Prediction: a View from the Trenches , H. Brendan McMahan el al.
 # Factorization Machines with Follow-The-Regularized-Leader for CTR prediction in Display Advertising , Anh-Phuong TA
 
+
+def load_data(filepath_name, hashSize , hashSalt):
+    return
+
+
 class FTRL_FM(Module):
 
     # Follow-the-regularized-leader to Factorization Machine implementation
@@ -23,11 +28,7 @@ class FTRL_FM(Module):
     def __init__(self, num_data, num_feature, option):
         super(FTRL_FM, self).__init__()
 
-        # self.A = inputs_matrix
 
-        #self.At = inputs_matrix.t()
-        #self.b = outputs
-        #self._thres = 1e-12
         self.num_data = num_data
         self.num_feature = num_feature
 
@@ -55,9 +56,7 @@ class FTRL_FM(Module):
         self.n_2nd = {}
         self.z_2nd = {}
         self.w_2nd = {}
-
         self.var_init = 0.1
-        #self._init_param_2nd_FM()
 
     def _init_param_2nd_FM(self,current_i_user):
 
@@ -165,9 +164,41 @@ class FTRL_FM(Module):
         return
 
 
+    def online_learning(self):
 
+        pred_list = []
+        real_list = []
+        for idx in range(self.num_data):
+            alpha = self.At[:, idx]
 
+            BP_alpha = self.BT_P.t().matmul(alpha).unsqueeze(1)
+            BN_alpha = self.BT_N.t().matmul(alpha).unsqueeze(1)
 
+            scalar = self.w.t().matmul(alpha) \
+                     + BP_alpha.t().matmul(BP_alpha) \
+                     - BN_alpha.t().matmul(BN_alpha)
+
+            if self.task == 'cls':
+                sign_idx = self._grad_loss(scalar * self.b[idx]) * self.b[idx]
+            elif self.task == 'reg':
+                sign_idx = self._grad_loss(scalar - self.b[idx])
+            else:
+                raise NotImplementedError
+
+            # print(self.g_w)
+            self.g_w += sign_idx * alpha.unsqueeze(1)
+            self.w = -self.eta * self.g_w
+
+            self._GFD(sign_idx, alpha)
+
+            pred_list.append(torch.tensor(scalar).double())
+            real_list.append(self.b[idx])
+
+            if idx % 100 == 0:
+                print(' %d th : pred %f , real %f , loss %f ' % (
+                    idx, scalar, self.b[idx], self._loss(scalar - self.b[idx])))
+
+        return np.asarray(pred_list), np.asarray(real_list)
 
 if __name__ == "__main__":
 

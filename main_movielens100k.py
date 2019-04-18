@@ -47,12 +47,8 @@ if __name__ == "__main__":
     pred_C , real = Model_CCFM.online_learning()
     pred_V, _ = Model_Vanila.online_learning()
 
-
-
     reg_metric_C = regression_metric(pred_C, real)
     reg_metric_V = regression_metric(pred_V, real)
-
-
 
     fig_prediction(pred_C, pred_V, real)
     fig_metric_reg(reg_metric_C, reg_metric_V)

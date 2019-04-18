@@ -68,7 +68,6 @@ class SFTRL_Vanila(Module):
 
         pred_list = []
         real_list = []
-
         for idx in range(self.num_data):
             alpha = self.At[:, idx]
 
@@ -92,13 +91,10 @@ class SFTRL_Vanila(Module):
             self.g_w += sign_idx*alpha.unsqueeze(1)
             self.w = -self.eta*self.g_w
 
-
             self._GFD(sign_idx, alpha)
 
             pred_list.append(torch.tensor(scalar).double())
             real_list.append(self.b[idx])
-
-
 
             if idx % 100 == 0:
                 print(' %d th : pred %f , real %f , loss %f ' % (
@@ -111,17 +107,12 @@ class SFTRL_Vanila(Module):
 
 
     def _GFD(self, sign, alpha):
-
         # alpha : num_feature x 1
         # sign : scalar value
 
-
         if sign <= 0:
             self.row_count_p += 1
-
-
             self.BT_P[:,self.row_count_p] = np.sqrt(-self.eta*sign)*alpha.squeeze()
-
 
             if self.row_count_p == 2*self.m - 1  :
 
@@ -131,13 +122,11 @@ class SFTRL_Vanila(Module):
 
                 V = self.BT_P.matmul(U[:, :nnz]).matmul(  (1/Sigma[:nnz].sqrt()).diag()   )
 
-
                 if nnz >= self.m:
 
                     self.BT_P = V[:, :self.m - 1].matmul((Sigma[:self.m - 1] - Sigma[self.m]).sqrt().diag())
                     self.BT_P = torch.cat([self.BT_P, torch.zeros([self.num_feature, self.m + 1]).double() ], 1)
                     self.row_count_p = self.m - 1
-
 
                 else:
                     self.BT_P = V[:, :nnz].matmul((Sigma[:nnz]).sqrt().diag())
@@ -146,7 +135,6 @@ class SFTRL_Vanila(Module):
 
 
         else:
-
 
             if self.row_count_n == 2*self.m - 1:
 
