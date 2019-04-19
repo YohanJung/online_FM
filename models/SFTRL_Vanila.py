@@ -59,7 +59,6 @@ class SFTRL_Vanila(Module):
             return
 
 
-
     def _predict(self):
 
         return

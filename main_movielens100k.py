@@ -1,6 +1,6 @@
 from data_manager import *
-from SFTRL_CCFM import SFTRL_CCFM
-from SFTRL_Vanila import SFTRL_Vanila
+from models.SFTRL_CCFM import SFTRL_CCFM
+from models.SFTRL_Vanila import SFTRL_Vanila
 from peformance_manager import *
 
 
@@ -30,13 +30,14 @@ if __name__ == "__main__":
 
     # model setup
     options = {}
-    options['m']  = 5
-    options['eta'] = 1e-1
+    m = 10
+    options['m']  = m
+    options['eta'] = 5e-1
     options['task'] = 'reg'
 
     options2 = {}
-    options2['m']  = 5
-    options2['eta'] = 1e-1
+    options2['m']  = m
+    options2['eta'] = 5e-1
     options2['task'] = 'reg'
 
 

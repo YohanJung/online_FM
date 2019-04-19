@@ -22,7 +22,7 @@ def classfication_metric():
 def fig_prediction(pred_C,pred_V,real):
     fig = plt.figure(figsize=(5,3))
     plt.plot(pred_C.data,'b.',label = 'S_CCFM')
-    plt.plot(pred_V.data, 'g.',label = 'V_FM')
+    plt.plot(pred_V.data, 'g.',label = 'S_FM')
     plt.plot(real,'r.',label = 'real')
     plt.title('prediction')
     plt.savefig('./Figure/exp_reg_' + time.ctime().replace(' ','_').replace(':','-') +'.png')
@@ -34,7 +34,7 @@ def fig_prediction(pred_C,pred_V,real):
 def fig_metric_reg(reg_metric_C,reg_metric_V):
     fig = plt.figure(figsize=(5,3))
     plt.plot(reg_metric_C,'b',label = 'S_CCFM')
-    plt.plot(reg_metric_V,'g',label = 'V_FM')
+    plt.plot(reg_metric_V,'g',label = 'S_FM')
     plt.legend()
     plt.savefig('./Figure/metric_reg_' + time.ctime().replace(' ','_').replace(':','-')+'.png')
     plt.show()
