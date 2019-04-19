@@ -1,10 +1,14 @@
-## Online Factorization Machine
+# Online Factorization Machine
 
-##### Fund
-    This research was supported by the Korean MSIT (Ministry of Science and ICT), under the National Program for 
-    Excellence in SW (2016-0-00018), supervised by the IITP (Institute for Information & communications Technology
-    Planning&Evaluation)
-#####
+## Getting Started
+
+This project compares the recent reseach of the online Factoriztiaon machine for regression and classficatino task
+We figure outs the pros and cons for recent research and will propose the model to revise the target problem of online       
+factorization machince.
+
+## Funding
+
+This research was supported by the Korean MSIT (Ministry of Science and ICT), under the National Program for Excellence in SW (2016-0-00018), supervised by the IITP (Institute for Information & communications Technology Planning&Evaluation)
 
 
 ##### This project compares the recent reseach of the online Factoriztiaon machine for regression and classficatino task
