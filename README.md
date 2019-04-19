@@ -7,7 +7,7 @@ This project compares the recent reseach of the online Factoriztiaon machine for
 ## Dataset
 
 regression task <p>
-movielens 100k - 
+movielens 100k - https://grouplens.org/datasets/movielens/
 <p>
 classfication task <p>
     
@@ -25,6 +25,7 @@ classfication task <p>
     
 ## Reference code
 
+    https://github.com/bmdy/SFTRL
     https://static.googleusercontent.com/media/research.google.com/ko//pubs/archive/41159.pdf
 
 
