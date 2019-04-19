@@ -21,13 +21,12 @@ movielens 100k - https://grouplens.org/datasets/movielens/
 
     Sketched Follow-The-Regularized-Leader for Online Factorization Machine -Luo Luo et al.
     Online Compact Convexified Factorization Machine -Wenpeng Zhang et al.
+    Ad Click Prediction: a View from the Trenches -H. Brendan McMahan et al.
 
-    
 ## Reference code
 
     https://github.com/bmdy/SFTRL
-    https://static.googleusercontent.com/media/research.google.com/ko//pubs/archive/41159.pdf
-
+    
 
 ## Funding
 
