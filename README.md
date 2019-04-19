@@ -26,8 +26,8 @@ Large-scale Online Kernel Learning with Random Feature Reparameterization -Tu Di
 
 ## Reference code
 
-https://github.com/bmdy/SFTRL
-https://github.com/tund/RRF
+https://github.com/bmdy/SFTRL <p>
+https://github.com/tund/RRF <p>
 
 ## Funding
 
