@@ -6,10 +6,10 @@ This project compares the recent reseach of the online Factoriztiaon machine for
 
 ## Dataset
 
-regression task <p>
+### regression task <p>
 movielens 100k - https://grouplens.org/datasets/movielens/
 <p>
-classfication task <p>
+### classfication task <p>
     
    
 
