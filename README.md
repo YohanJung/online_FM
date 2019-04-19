@@ -15,24 +15,17 @@ classfication task <p>
 
 ## Model
 
+    SFTRL
+    
 ## Reference paper
 
-    Gaussian Process Kernels for Pattern Discovery and Extrapolation - Andrew Gordon wilson et al.
-    Variational learning of inducing variables in sparse Gaussian processes - Titsias, Michalis et al.
-    Sparse Spectrum Gaussian Process Regression - Miguel Lázaro-Gredilla et al.
-    Gaussian processes for big data - J Hensman et al.
+    Sketched Follow-The-Regularized-Leader for Online Factorization Machine -Luo Luo et al.
+    Online Compact Convexified Factorization Machine -Wenpeng Zhang et al.
 
-## Reference model
-
-    Gaussian Process Kernels for Pattern Discovery and Extrapolation - Andrew Gordon wilson et al.
-    Variational learning of inducing variables in sparse Gaussian processes - Titsias, Michalis et al.
-    Sparse Spectrum Gaussian Process Regression - Miguel Lázaro-Gredilla et al.
-    Gaussian processes for big data - J Hensman et al.
-
+    
 ## Reference code
 
     https://static.googleusercontent.com/media/research.google.com/ko//pubs/archive/41159.pdf
-    #https://github.com/cornellius-gp/gpytorch
 
 
 ## Funding
