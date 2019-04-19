@@ -22,7 +22,7 @@ if __name__ == "__main__":
     x_train_s, rate_train_s, _ = sort_dataset(x_train, rate_train, timestamp_train)
 
 
-    down_sampling = 20
+    down_sampling = 10
     # sparse to dense
     inputs_matrix = torch.tensor(x_train_s[0:x_train_s.size:down_sampling].todense()).double()
     outputs = torch.tensor(rate_train_s[0:x_train_s.size:down_sampling]).double()
@@ -30,12 +30,12 @@ if __name__ == "__main__":
 
     # model setup
     options = {}
-    options['m']  = 10
+    options['m']  = 5
     options['eta'] = 1e-1
     options['task'] = 'reg'
 
     options2 = {}
-    options2['m']  = 10
+    options2['m']  = 5
     options2['eta'] = 1e-1
     options2['task'] = 'reg'
 

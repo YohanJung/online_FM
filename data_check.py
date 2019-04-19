@@ -24,7 +24,7 @@ if __name__ == "__main__":
     # sort dataset in time
     x_train_s, rate_train_s, _ = sort_dataset(x_train, rate_train, timestamp_train)
 
-    down_sampling = 100
+    down_sampling = 10
     # sparse to dense
     inputs_matrix = torch.tensor(x_train_s[0:x_train_s.size:down_sampling].todense()).double()
     outputs = torch.tensor(rate_train_s[0:x_train_s.size:down_sampling]).double()
