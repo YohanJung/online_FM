@@ -4,6 +4,17 @@
 
 This project compares the recent reseach of the online Factoriztiaon machine for regression and classficatino task. We figure outs the pros and cons for recent research and will propose the model to revise the target problem of online factorization machince.
 
+## Dataset
+
+regression task <p>
+movielens 100k - 
+<p>
+classfication task <p>
+    
+   
+
+## Model
+
 ## Reference paper
 
     Gaussian Process Kernels for Pattern Discovery and Extrapolation - Andrew Gordon wilson et al.
