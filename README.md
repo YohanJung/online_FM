@@ -6,10 +6,10 @@ This project compares the recent reseach of the online Factoriztiaon machine for
 
 ## Dataset
 
-### regression task <p>
+### regression task <br/>
 movielens 100k - https://grouplens.org/datasets/movielens/
     
-### classfication task <p>
+### classfication task <br/>
     
    
 
@@ -26,8 +26,8 @@ Large-scale Online Kernel Learning with Random Feature Reparameterization -Tu Di
 
 ## Reference code
 
-https://github.com/bmdy/SFTRL <p>
-https://github.com/tund/RRF <p>
+https://github.com/bmdy/SFTRL <br/>
+https://github.com/tund/RRF <br/>
 
 ## Funding
 
