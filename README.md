@@ -15,17 +15,20 @@ movielens 100k - https://grouplens.org/datasets/movielens/
 
 ## Model
 
-SFTRL
+0) FM + FTRL - working
+1) SFTRL
+2) OCCFM - working
     
 ## Reference paper
 
-Sketched Follow-The-Regularized-Leader for Online Factorization Machine -Luo Luo et al.
-Online Compact Convexified Factorization Machine -Wenpeng Zhang et al.
-Ad Click Prediction: a View from the Trenches -H. Brendan McMahan et al.
-Large-scale Online Kernel Learning with Random Feature Reparameterization -Tu Dinh Nguyen et al.
-Online Compact Convexified Factorization Machine -Wenpeng Zhang et al.
+0) Factorization Machines -S Rendle et al.
+1) Sketched Follow-The-Regularized-Leader for Online Factorization Machine -Luo Luo et al.
+2) Online Compact Convexified Factorization Machine -Wenpeng Zhang et al.
+3) Ad Click Prediction: a View from the Trenches -H. Brendan McMahan et al.
+4) Online Compact Convexified Factorization Machine -Wenpeng Zhang et al.
+5) Large-scale Online Kernel Learning with Random Feature Reparameterization -Tu Dinh Nguyen et al.
 <br/>
-Scalable Variational Bayesian Factorization Machine -Avijit Saha et al.
+6) Scalable Variational Bayesian Factorization Machine -Avijit Saha et al.
 
 ## Reference code
 
