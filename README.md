@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-This project compares the recent reseach of the online Factoriztiaon machine for regression and classficatino task. We figure outs the pros and cons for recent research and will propose the model to revise the target problem of online factorization machince.
+This project compares the recent reseach of the online Factoriztiaon machine for regression and classficatino task. We figure out the pros and cons for recent research. We will propose the revised model to overcome the limitation of online factorization machince.
 
 ## Dataset
 
