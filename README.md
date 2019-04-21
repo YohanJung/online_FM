@@ -18,7 +18,7 @@ movielens 100k - https://grouplens.org/datasets/movielens/
 1. FM + FTRL <br/>
 /models/FM_FTRL.py
 2. SFTRL <br/>
-/models/SFTRL_CCFM.py 
+/models/SFTRL_CCFM.py   <br/>
 /models/SFTRL_Vanila.py   
 3. OCCFM - working
     
