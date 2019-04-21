@@ -26,8 +26,7 @@ movielens 100k - https://grouplens.org/datasets/movielens/
 3. Online Compact Convexified Factorization Machine -Wenpeng Zhang et al.
 4. Ad Click Prediction: a View from the Trenches -H. Brendan McMahan et al.
 5. Online Compact Convexified Factorization Machine -Wenpeng Zhang et al.
-6. Large-scale Online Kernel Learning with Random Feature Reparameterization -Tu Dinh Nguyen et al.
-<br/>
+6. Large-scale Online Kernel Learning with Random Feature Reparameterization -Tu Dinh Nguyen et al. <br/>
 7. Scalable Variational Bayesian Factorization Machine -Avijit Saha et al.
 
 ## Reference code
