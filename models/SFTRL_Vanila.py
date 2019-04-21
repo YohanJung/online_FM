@@ -131,10 +131,12 @@ class SFTRL_Vanila(Module):
 
         else:
 
+            self.row_count_n += 1
+            self.BT_N[:, self.row_count_n] = np.sqrt(self.eta * sign) * alpha.squeeze()
+
+
             if self.row_count_n == 2*self.m - 1:
 
-                self.row_count_n += 1
-                self.BT_N[:,self.row_count_n] = np.sqrt(self.eta*sign)*alpha.squeeze()
 
                 U, Sigma, _ = self.BT_N.t().matmul(self.BT_N).svd()
                 Sigma[Sigma.data <= self._thres] = 0.0

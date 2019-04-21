@@ -38,8 +38,8 @@ class FM_FTRL(Module):
 
 
     def _init_parameter(self):
-        self.w1 = 0.1*Variable(torch.randn(self.num_feature,1).type(tensor_type))
-        self.W2 = 0.1*Variable(torch.randn(2*self.m,self.num_feature-1).type(tensor_type) , requires_grad = True)
+        self.w1 = Variable(torch.randn(self.num_feature,1).type(tensor_type))
+        self.W2 = Variable(torch.randn(2*self.m,self.num_feature-1).type(tensor_type) , requires_grad = True)
 
 
     def _loss(self, x):
@@ -77,7 +77,7 @@ class FM_FTRL(Module):
 
             alpha = self.At[:, idx].unsqueeze(1)
             temp_scalar = self.W2.matmul(alpha[:-1])
-            scalar = self.w1.t().matmul(alpha) + (temp_scalar**2).sum()
+            scalar = self.w1.t().matmul(alpha) + temp_scalar.t().matmul(temp_scalar)
 
 
             if self.task == 'cls':
@@ -89,7 +89,7 @@ class FM_FTRL(Module):
 
 
             g_w1 += sign_idx*alpha
-            g_W2 += 2**self.W2.matmul(alpha[:-1]).matmul(alpha[:-1].t())
+            g_W2 += 2*self.W2.matmul(alpha[:-1]).matmul(alpha[:-1].t())
 
             self.w1 = -self.eta*g_w1
             self.W2 = -self.eta*g_W2

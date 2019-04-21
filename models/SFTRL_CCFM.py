@@ -75,7 +75,7 @@ class SFTRL_CCFM(Module):
             BN_alpha = self.BT_N.t().matmul(alpha)
 
             scalar = (BP_alpha.t().matmul(BP_alpha) - BN_alpha.t().matmul(BN_alpha)).squeeze()
-            print(scalar)
+
 
             if self.task == 'cls':
                 sign_idx = self._grad_loss(scalar * self.b[idx]) * self.b[idx]
@@ -109,8 +109,6 @@ class SFTRL_CCFM(Module):
 
         if sign <= 0:
             self.row_count_p += 1
-
-
             self.BT_P[:,self.row_count_p] = np.sqrt(-self.eta*sign)*alpha.squeeze()
 
 
@@ -135,11 +133,11 @@ class SFTRL_CCFM(Module):
 
         else:
 
+            self.row_count_n += 1
+            self.BT_N[:, self.row_count_n] = np.sqrt(self.eta * sign) * alpha.squeeze()
+
+
             if self.row_count_n == 2*self.m - 1:
-
-                self.row_count_n += 1
-                self.BT_N[:,self.row_count_n] = np.sqrt(self.eta*sign)*alpha.squeeze()
-
                 U, Sigma, _ = (self.BT_N.t().matmul(self.BT_N)).svd()
                 Sigma[Sigma.data <= self._thres] = 0.0
                 nnz = Sigma.nonzero().numel()
