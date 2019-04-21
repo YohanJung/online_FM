@@ -18,7 +18,7 @@ class SFTRL_CCFM(Module):
 
         super(SFTRL_CCFM, self).__init__()
 
-        #self.A = inputs_matrix
+
         self.At = inputs_matrix.t()
         self.b = outputs
         self._thres = 1e-12
@@ -69,13 +69,13 @@ class SFTRL_CCFM(Module):
         real_list = []
 
         for idx in range(self.num_data):
-            alpha = self.At[:, idx]
+            alpha = self.At[:, idx].unsqueeze(1)
 
-            BP_alpha = self.BT_P.t().matmul(alpha).unsqueeze(1)
-            BN_alpha = self.BT_N.t().matmul(alpha).unsqueeze(1)
+            BP_alpha = self.BT_P.t().matmul(alpha)
+            BN_alpha = self.BT_N.t().matmul(alpha)
 
-            scalar = BP_alpha.t().matmul(BP_alpha) - BN_alpha.t().matmul(BN_alpha)
-
+            scalar = (BP_alpha.t().matmul(BP_alpha) - BN_alpha.t().matmul(BN_alpha)).squeeze()
+            print(scalar)
 
             if self.task == 'cls':
                 sign_idx = self._grad_loss(scalar * self.b[idx]) * self.b[idx]
@@ -86,9 +86,9 @@ class SFTRL_CCFM(Module):
 
             self._GFD(sign_idx, alpha)
 
-            pred_list.append(torch.tensor(scalar).squeeze().double())
-            real_list.append(self.b[idx])
 
+            pred_list.append(scalar)
+            real_list.append(self.b[idx])
 
             if idx % 100 == 0:
                 print(' %d th : pred %f , real %f , loss %f ' % (
@@ -116,10 +116,9 @@ class SFTRL_CCFM(Module):
 
             if self.row_count_p == 2*self.m - 1  :
 
-                U, Sigma, _ = self.BT_P.t().matmul( self.BT_P).svd()
+                U, Sigma, _ = (self.BT_P.t().matmul(self.BT_P)).svd()
                 Sigma[Sigma.data <= self._thres] = 0.0
                 nnz = Sigma.nonzero().numel()
-
                 V = self.BT_P.matmul(U[:, :nnz]).matmul(  (1/Sigma[:nnz].sqrt()).diag()   )
 
 
@@ -129,22 +128,19 @@ class SFTRL_CCFM(Module):
                     self.BT_P = torch.cat([self.BT_P, torch.zeros([self.num_feature, self.m + 1]).double() ], 1)
                     self.row_count_p = self.m - 1
 
-
                 else:
                     self.BT_P = V[:, :nnz].matmul((Sigma[:nnz]).sqrt().diag())
                     self.BT_P= torch.cat([self.BT_P, torch.zeros([self.num_feature, (2 * self.m) - nnz]).double() ], 1)
                     self.row_count_p = nnz
 
-
         else:
-
 
             if self.row_count_n == 2*self.m - 1:
 
                 self.row_count_n += 1
                 self.BT_N[:,self.row_count_n] = np.sqrt(self.eta*sign)*alpha.squeeze()
 
-                U, Sigma, _ = self.BT_N.t().matmul(self.BT_N).svd()
+                U, Sigma, _ = (self.BT_N.t().matmul(self.BT_N)).svd()
                 Sigma[Sigma.data <= self._thres] = 0.0
                 nnz = Sigma.nonzero().numel()
                 V = self.BT_N.matmul(U[:, :nnz]).matmul(  (1/Sigma[:nnz].sqrt()).diag()    )

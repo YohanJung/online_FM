@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.io as sio
 from scipy.sparse import lil_matrix
+from scipy.sparse import hstack
 
 from datetime import timezone, timedelta, datetime
 import csv
@@ -15,6 +16,7 @@ import matplotlib.pyplot as plt
 def load_dataset(filename, lines, columns , nbUsers):
     # Features are one-hot encoded in a sparse matrix
     X = lil_matrix((lines, columns)).astype('float32')
+    X2 = lil_matrix((lines, columns +1 )).astype('float64')
     # Labels are stored in a vector
     Y = []
     Y2 = []
@@ -25,6 +27,11 @@ def load_dataset(filename, lines, columns , nbUsers):
         for userId, movieId, rating, timestamp in samples:
             X[line, int(userId) - 1] = 1
             X[line, int(nbUsers) + int(movieId) - 1] = 1
+
+            X2[line, int(userId) - 1] = 1
+            X2[line, int(nbUsers) + int(movieId) - 1] = 1
+            X2[line, columns ] = 1
+
             if int(rating) >= 3:
                 Y.append(1)
             else:
@@ -35,7 +42,7 @@ def load_dataset(filename, lines, columns , nbUsers):
 
     date_time = np.array(date_time).astype('float32')
     Y = np.array(Y).astype('float64')
-    return X, Y, Y2, date_time
+    return X,X2 , Y, Y2, date_time
 
 
 
@@ -51,6 +58,11 @@ def sort_dataset(X,Y,utc_time_stamp):
     sorted_Y = Y[time_order.argsort()]
 
     return sorted_X,sorted_Y,time_order
+
+
+
+
+
 
 
 
