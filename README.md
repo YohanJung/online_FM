@@ -17,10 +17,13 @@ movielens 100k - https://grouplens.org/datasets/movielens/
 
 1. FM + FTRL <br/>
 /models/FM_FTRL.py
-2. SFTRL <br/>
+2. SFTRL C
 /models/SFTRL_CCFM.py   <br/>
 /models/SFTRL_Vanila.py   
 3. OCCFM - working
+4. RRF <br/>
+/models/RRF.py (refactoring needed in pytorch stytle)   
+
     
 ## Reference paper
 
