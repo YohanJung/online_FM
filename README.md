@@ -8,11 +8,11 @@ This project compares the recent reseach of the online Factoriztiaon machine for
 
 ### regression task <br/>
 
-movielens 100k - https://grouplens.org/datasets/movielens/
-cod-rna - https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/
+movielens 100k - https://grouplens.org/datasets/movielens/ <br/>
+cod-rna - https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/ <br/>
 
 ### classfication task <br/>
-cod-rna - https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/
+cod-rna - https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/ <br/>
     
    
 
