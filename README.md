@@ -20,9 +20,9 @@ cod-rna - https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/ <br/>
 
 1. FM + FTRL <br/>
 /models/FM_FTRL.py
-2. SFTRL C
+2. SFTRL <br/>
 /models/SFTRL_CCFM.py   <br/>
-/models/SFTRL_Vanila.py   
+/models/SFTRL_Vanila.py  <br/> 
 3. OCCFM - working
 4. RRF <br/>
 /models/RRF.py (refactoring needed in pytorch stytle)   
