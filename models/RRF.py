@@ -68,6 +68,8 @@ class RRF(object):
         self.e = None
         self.num_features = 0  # number of data features
 
+
+
     def _init_params(self, x):
         if self.num_classes > 2:
             self.w = 0.01 * self.random_engine.randn(2 * self.D, self.num_classes)
@@ -78,10 +80,10 @@ class RRF(object):
         self.gamma_ = np.log(self.gamma) * np.ones(self.num_features)  # Nx1
         self.e = self.random_engine.randn(self.num_features, self.D)  # NxD (\epsilon ~ N(0, 1))
 
+
     def fit(self, x, y):
         """Fit the model to the data x and the label y
         """
-
         # copy to avoid modifying
         x = x.copy()
         y = y.copy()
@@ -95,6 +97,7 @@ class RRF(object):
         self.start_time = time.time()
 
         mistake = 0.0
+        mistake2 = []
         for t in range(x.shape[0]):
             phi = self._get_phi(x[[t]])
 
@@ -107,6 +110,7 @@ class RRF(object):
                 mistake += (y_pred != y[t])
             else:
                 mistake += (wx[0] - y[t]) ** 2
+                mistake2.append(wx[0])
             dw, dgamma = self.get_grad(x[[t]], y[[t]], phi=phi, wx=wx)  # compute gradients
 
             # update parameters
@@ -117,7 +121,7 @@ class RRF(object):
 
         self.train_time = time.time() - self.start_time
 
-        return self
+        return np.asarray(mistake2).reshape([-1,1])
 
     def _get_wxy(self, wx, y):
         m = len(y)  # batch size

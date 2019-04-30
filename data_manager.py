@@ -1,20 +1,46 @@
 import numpy as np
 import scipy.io as sio
 from scipy.sparse import lil_matrix
+from scipy.sparse import hstack
 
 from datetime import timezone, timedelta, datetime
 import csv
 
+from sklearn.datasets import load_svmlight_file
+from sklearn.preprocessing import MinMaxScaler
 
 import matplotlib
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 
 
+def load_dataset_YearPredictionMSD(dataname, isTransformY=False, isRemoveEmpty=False):
+    # filename = home_dir + 'Resource/' + dataname
+    X, y = load_svmlight_file(dataname)
+
+    X = np.asarray(X.todense())
+    n, d = X.shape
+    print('Size of X is ' + str(n) + '-by-' + str(d))
+    print('Size of y is ' + str(y.shape))
+    X = MinMaxScaler().fit_transform(X)
+
+    if isTransformY:
+        y = (y * 2) - 3
+
+    if isRemoveEmpty:
+        sumX = numpy.sum(numpy.abs(X), axis=1)
+        idx = (sumX > 1e-6)
+        X = X[idx, :]
+        y = y[idx]
+
+    return X, y
+
+
 
 def load_dataset(filename, lines, columns , nbUsers):
     # Features are one-hot encoded in a sparse matrix
     X = lil_matrix((lines, columns)).astype('float32')
+    X2 = lil_matrix((lines, columns +1 )).astype('float64')
     # Labels are stored in a vector
     Y = []
     Y2 = []
@@ -25,6 +51,11 @@ def load_dataset(filename, lines, columns , nbUsers):
         for userId, movieId, rating, timestamp in samples:
             X[line, int(userId) - 1] = 1
             X[line, int(nbUsers) + int(movieId) - 1] = 1
+
+            X2[line, int(userId) - 1] = 1
+            X2[line, int(nbUsers) + int(movieId) - 1] = 1
+            X2[line, columns ] = 1
+
             if int(rating) >= 3:
                 Y.append(1)
             else:
@@ -35,7 +66,7 @@ def load_dataset(filename, lines, columns , nbUsers):
 
     date_time = np.array(date_time).astype('float32')
     Y = np.array(Y).astype('float64')
-    return X, Y, Y2, date_time
+    return X,X2 , Y, Y2, date_time
 
 
 
@@ -53,10 +84,13 @@ def sort_dataset(X,Y,utc_time_stamp):
     return sorted_X,sorted_Y,time_order
 
 
+if __name__ == "__main__" :
+    
+    filename = './data/YearPredictionMSD/YearPredictionMSD'
+    #filename = './YearPredictionMSD_test'
+    X, y = load_dataset_YearPredictionMSD(filename)
 
-
-#if __name__ == "__main__" :
-
+    #print(X)
     # nbUsers = 943
     # nbMovies = 1682
     # nbFeatures = nbUsers + nbMovies

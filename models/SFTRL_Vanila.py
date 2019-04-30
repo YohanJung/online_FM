@@ -32,8 +32,8 @@ class SFTRL_Vanila(Module):
         self.row_count_p = 0
         self.row_count_n = 0
 
-        self.BT_P = tensor_type(np.zeros([self.num_feature, 2*self.m]))
-        self.BT_N = tensor_type(np.zeros([self.num_feature, 2*self.m]))
+        self.BT_P = tensor_type(np.zeros([self.num_feature-1, 2*self.m]))
+        self.BT_N = tensor_type(np.zeros([self.num_feature-1, 2*self.m]))
 
         self.w = tensor_type(np.zeros([self.num_feature,1]))
         self.g_w = tensor_type(np.zeros([self.num_feature,1]))
@@ -70,14 +70,11 @@ class SFTRL_Vanila(Module):
         for idx in range(self.num_data):
             alpha = self.At[:, idx]
 
-            BP_alpha = self.BT_P.t().matmul(alpha).unsqueeze(1)
-            BN_alpha = self.BT_N.t().matmul(alpha).unsqueeze(1)
+            BP_alpha = self.BT_P.t().matmul(alpha[:-1]).unsqueeze(1)
+            BN_alpha = self.BT_N.t().matmul(alpha[:-1]).unsqueeze(1)
 
 
-            scalar =  self.w.t().matmul(alpha) \
-                      + BP_alpha.t().matmul(BP_alpha) \
-                      - BN_alpha.t().matmul(BN_alpha)
-
+            scalar =  self.w.t().matmul(alpha) + BP_alpha.t().matmul(BP_alpha) - BN_alpha.t().matmul(BN_alpha)
             if self.task == 'cls':
                 sign_idx = self._grad_loss(scalar * self.b[idx]) * self.b[idx]
             elif self.task == 'reg':
@@ -90,7 +87,7 @@ class SFTRL_Vanila(Module):
             self.g_w += sign_idx*alpha.unsqueeze(1)
             self.w = -self.eta*self.g_w
 
-            self._GFD(sign_idx, alpha)
+            self._GFD(sign_idx, alpha[:-1])
 
             pred_list.append(torch.tensor(scalar).double())
             real_list.append(self.b[idx])
@@ -101,7 +98,6 @@ class SFTRL_Vanila(Module):
 
 
         return np.asarray(pred_list),np.asarray(real_list)
-
 
 
 
@@ -124,21 +120,23 @@ class SFTRL_Vanila(Module):
                 if nnz >= self.m:
 
                     self.BT_P = V[:, :self.m - 1].matmul((Sigma[:self.m - 1] - Sigma[self.m]).sqrt().diag())
-                    self.BT_P = torch.cat([self.BT_P, torch.zeros([self.num_feature, self.m + 1]).double() ], 1)
+                    self.BT_P = torch.cat([self.BT_P, torch.zeros([self.num_feature-1, self.m + 1]).double() ], 1)
                     self.row_count_p = self.m - 1
 
                 else:
                     self.BT_P = V[:, :nnz].matmul((Sigma[:nnz]).sqrt().diag())
-                    self.BT_P= torch.cat([self.BT_P, torch.zeros([self.num_feature, (2 * self.m) - nnz]).double() ], 1)
+                    self.BT_P= torch.cat([self.BT_P, torch.zeros([self.num_feature-1, (2 * self.m) - nnz]).double() ], 1)
                     self.row_count_p = nnz
 
 
         else:
 
+            self.row_count_n += 1
+            self.BT_N[:, self.row_count_n] = np.sqrt(self.eta * sign) * alpha.squeeze()
+
+
             if self.row_count_n == 2*self.m - 1:
 
-                self.row_count_n += 1
-                self.BT_N[:,self.row_count_n] = np.sqrt(self.eta*sign)*alpha.squeeze()
 
                 U, Sigma, _ = self.BT_N.t().matmul(self.BT_N).svd()
                 Sigma[Sigma.data <= self._thres] = 0.0
@@ -147,12 +145,12 @@ class SFTRL_Vanila(Module):
 
                 if nnz >= self.m:
                     self.BT_N = V[:, :self.m - 1].matmul((Sigma[:self.m - 1] - Sigma[self.m]).sqrt().diag())
-                    self.BT_N = torch.cat([self.BT_N, torch.zeros([self.num_feature, self.m + 1 ]).double() ], 1)
+                    self.BT_N = torch.cat([self.BT_N, torch.zeros([self.num_feature-1, self.m + 1 ]).double() ], 1)
                     self.row_count_n = self.m - 1
 
                 else:
                     self.BT_N = V[:, :nnz].matmul((Sigma[:nnz]).sqrt().diag())
-                    self.BT_N = torch.cat([self.BT_N, torch.zeros([self.num_feature, (2 * self.m) - nnz] ).double()] , 1)
+                    self.BT_N = torch.cat([self.BT_N, torch.zeros([self.num_feature-1, (2 * self.m) - nnz] ).double()] , 1)
                     self.row_count_n = nnz
 
         return
