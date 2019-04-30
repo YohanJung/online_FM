@@ -88,7 +88,7 @@ if __name__ == "__main__" :
     
     filename = './data/YearPredictionMSD/YearPredictionMSD'
     #filename = './YearPredictionMSD_test'
-    X, y = load_dataset_YearPredictionMSD(filename)
+    #X, y = load_dataset_YearPredictionMSD(filename)
 
     #print(X)
     # nbUsers = 943

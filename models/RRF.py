@@ -81,6 +81,7 @@ class RRF(object):
         self.e = self.random_engine.randn(self.num_features, self.D)  # NxD (\epsilon ~ N(0, 1))
 
 
+
     def fit(self, x, y):
         """Fit the model to the data x and the label y
         """
