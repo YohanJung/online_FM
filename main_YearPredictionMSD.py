@@ -9,8 +9,8 @@ from peformance_manager import *
 
 if __name__ == "__main__":
 
-    filename = './data/YearPredictionMSD/YearPredictionMSD'
-    filename1 = 'YearPredictionMSD'
+    filename = './data/YearPredictionMSD/YearPredictionMSD_test'
+    filename1 = 'YearPredictionMSD_test'
     x_train_s, rate_train_s = load_dataset_YearPredictionMSD(filename)
 
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         pass
 
 
-    down_sampling = 1000
+    down_sampling = 10
     # sparse to dense
 
     # # model setup
