@@ -39,14 +39,14 @@ if __name__ == "__main__":
 
 
     c = RRF(loss='logit', task="classification", learning_rate=0.003,
-            learning_rate_gamma=0.001, gamma=1.0, D=100)
+            learning_rate_gamma=0.001, gamma = .1, D = 50)
 
 
     pred_RRF = c.fit(x_train_s[0:x_train_s.size:down_sampling], rate_train_s[0:x_train_s.size:down_sampling])
     #train_time = c.train_time
     #print(pred_rrf)
 
-    m = 10
+    m = 20
 
     options = {}
     options['Data'] = filename

@@ -13,8 +13,7 @@ INF = 1e+8
 
 
 class RRF(object):
-    """Reparameterized Random Features
-    """
+    # Reparameterized Random Features
 
     def __init__(self,
                  D=100,  # number of random features
@@ -122,7 +121,6 @@ class RRF(object):
             self.gamma_ -= self.learning_rate_gamma * dgamma
 
         self.mistake = mistake / x.shape[0]
-
         self.train_time = time.time() - self.start_time
 
         return np.asarray(mistake2).reshape([-1,1])

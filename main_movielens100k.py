@@ -34,7 +34,7 @@ if __name__ == "__main__":
         pass
 
 
-    down_sampling = 50
+    down_sampling = 20
     # sparse to dense
 
     # # model setup
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     save_path2 = './figure_results/movielens/metric_reg_'
     save_legend = ['SFTRL_CCFM', 'SFTRL_Vanila','RRF']
     fig_prediction([pred_C,pred_V,pred_RRF],save_legend,real,options,save_path1)
-    fig_metric([reg_metric_C,reg_metric_V,reg_metric_RRF], save_legend,options,save_path2)
+    fig_metric_reg([reg_metric_C,reg_metric_V,reg_metric_RRF], save_legend,options,save_path2)
 
     # save_legend = ['SFTRL_CCFM', 'SFTRL_Vanila','RRF','FM_FTRL']
     # fig_prediction([pred_C,pred_V,pred_RRF,pred_F],save_legend,real,options,save_path)

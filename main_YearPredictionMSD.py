@@ -29,10 +29,10 @@ if __name__ == "__main__":
     # # model setup
 
 
-    # c = RRF(loss='l2', task="regression", learning_rate=0.01,
-    #         learning_rate_gamma = 0.00001, gamma = 1.0, D = 50)
-    # #pred_RRF = c.fit(x_train_s.todense()[0:x_train_s.todense().size:down_sampling], rate_train_s[0:x_train_s.todense().size:down_sampling])
-    # pred_RRF = c.fit(x_train_s[0:x_train_s.size:down_sampling],rate_train_s[0:x_train_s.size:down_sampling])
+    c = RRF(loss='l2', task="regression", learning_rate=0.01,
+            learning_rate_gamma = 0.0001, gamma = .1, D = 50)
+    #pred_RRF = c.fit(x_train_s.todense()[0:x_train_s.todense().size:down_sampling], rate_train_s[0:x_train_s.todense().size:down_sampling])
+    pred_RRF = c.fit(x_train_s[0:x_train_s.size:down_sampling],rate_train_s[0:x_train_s.size:down_sampling])
 
     # sparse to dense
     inputs_matrix = torch.tensor(x_train_s[0:x_train_s.size:down_sampling]).double()
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     # # model setup
 
-    m = 20
+    m = 30
 
     options = {}
     options['Data'] = filename1
@@ -74,29 +74,16 @@ if __name__ == "__main__":
     pred_F, _ = Model_FM_FTRL.online_learning()
 
 
+    reg_metric_RRF = regression_metric(pred_RRF, real)
     reg_metric_C = regression_metric(pred_C, real)
     reg_metric_V = regression_metric(pred_V, real)
     reg_metric_F = regression_metric(pred_F, real)
 
-    # save_legend = ['SFTRL_CCFM', 'SFTRL_Vanila']
-    # fig_prediction([pred_C,pred_V], save_legend,real,options)
-    # fig_metric([reg_metric_C,reg_metric_V], save_legend,options)
-
-    #print(reg_metric_C)
 
     save_path1 = './figure_results/YearPredictionMSD/pred_reg_'
     save_path2 = './figure_results/YearPredictionMSD/metric_reg_'
-    save_legend = ['SFTRL_CCFM', 'SFTRL_Vanila','FM_FTRL']
-    fig_prediction3([pred_C,pred_V,pred_F],save_legend,real,options,save_path1)
-    fig_metric3([reg_metric_C,reg_metric_V,reg_metric_F], save_legend,options,save_path2)
+    save_legend = ['RRF','SFTRL_CCFM', 'SFTRL_Vanila','FM_FTRL']
+    fig_prediction([pred_RRF,pred_C,pred_V,pred_F],save_legend,real,options,save_path1)
+    fig_metric_reg([reg_metric_RRF,reg_metric_C,reg_metric_V,reg_metric_F], save_legend,options,save_path2)
 
 
-    # save_path1 = './figure_results/YearPredictionMSD/pred_reg_'
-    # save_path2 = './figure_results/YearPredictionMSD/metric_reg_'
-    # save_legend = ['SFTRL_CCFM', 'SFTRL_Vanila','RRF']
-    # fig_prediction([pred_C,pred_V,pred_RRF],save_legend,real,options,save_path1)
-    # fig_metric([reg_metric_C,reg_metric_V,reg_metric_RRF], save_legend,options,save_path2)
-
-    # save_legend = ['SFTRL_CCFM', 'SFTRL_Vanila','RRF','FM_FTRL']
-    # fig_prediction([pred_C,pred_V,pred_RRF,pred_F],save_legend,real,options,save_path)
-    # fig_metric([reg_metric_C,reg_metric_V,reg_metric_RRF,reg_metric_F], save_legend,options,save_path)

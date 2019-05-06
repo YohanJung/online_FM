@@ -25,7 +25,7 @@ if __name__ == "__main__":
         rate_train_s = np.asarray(y)
 
 
-    down_sampling = 5
+    down_sampling = 2
     # sparse to dense
     inputs_matrix = torch.tensor(x_train_s[0:x_train_s.size:down_sampling]).double()
     outputs = torch.tensor(rate_train_s[0:x_train_s.size:down_sampling]).double()
