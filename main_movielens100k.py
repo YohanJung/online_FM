@@ -20,10 +20,10 @@ if __name__ == "__main__":
     filename1, filename2 = 'ua.base', './ua.test'
 
     # load dataset
-    _, x_train, y_train, rate_train, timestamp_train = load_dataset(data_dir + filename1, nbRatingsTrain, nbFeatures, nbUsers)
+    _, x_train, y_train, rate_train, timestamp_train = load_dataset_movielens(data_dir + filename1, nbRatingsTrain, nbFeatures, nbUsers)
     # sort dataset in time
     #x_train_s, rate_train_s, _ = sort_dataset(x_train, rate_train, timestamp_train)
-    x_train_s, rate_train_s, _ = sort_dataset(x_train, rate_train, timestamp_train)
+    x_train_s, rate_train_s, _ = sort_dataset_movielens(x_train, rate_train, timestamp_train)
 
     want_permute = True
     if want_permute :

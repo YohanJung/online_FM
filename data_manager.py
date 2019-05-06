@@ -13,31 +13,7 @@ import matplotlib
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 
-
-def load_dataset_YearPredictionMSD(dataname, isTransformY=False, isRemoveEmpty=False):
-    # filename = home_dir + 'Resource/' + dataname
-    X, y = load_svmlight_file(dataname)
-
-    X = np.asarray(X.todense())
-    n, d = X.shape
-    print('Size of X is ' + str(n) + '-by-' + str(d))
-    print('Size of y is ' + str(y.shape))
-    X = MinMaxScaler().fit_transform(X)
-
-    if isTransformY:
-        y = (y * 2) - 3
-
-    if isRemoveEmpty:
-        sumX = numpy.sum(numpy.abs(X), axis=1)
-        idx = (sumX > 1e-6)
-        X = X[idx, :]
-        y = y[idx]
-
-    return X, y
-
-
-
-def load_dataset(filename, lines, columns , nbUsers):
+def load_dataset_movielens(filename, lines, columns , nbUsers):
     # Features are one-hot encoded in a sparse matrix
     X = lil_matrix((lines, columns)).astype('float32')
     X2 = lil_matrix((lines, columns +1 )).astype('float64')
@@ -70,7 +46,7 @@ def load_dataset(filename, lines, columns , nbUsers):
 
 
 
-def sort_dataset(X,Y,utc_time_stamp):
+def sort_dataset_movielens(X,Y,utc_time_stamp):
 
     # make up some data
     time_order = np.array([datetime.utcfromtimestamp(current_utc) for current_utc in utc_time_stamp])
@@ -84,53 +60,94 @@ def sort_dataset(X,Y,utc_time_stamp):
     return sorted_X,sorted_Y,time_order
 
 
+
+
+
+def load_dataset_YearPredictionMSD(dataname, isTransformY=False, isRemoveEmpty=False):
+    # filename = home_dir + 'Resource/' + dataname
+    X, y = load_svmlight_file(dataname)
+
+    X = np.asarray(X.todense())
+    n, d = X.shape
+    print('Size of X is ' + str(n) + '-by-' + str(d))
+    print('Size of y is ' + str(y.shape))
+    X = MinMaxScaler().fit_transform(X)
+
+    if isTransformY:
+        y = (y * 2) - 3
+
+    if isRemoveEmpty:
+        sumX = numpy.sum(numpy.abs(X), axis=1)
+        idx = (sumX > 1e-6)
+        X = X[idx, :]
+        y = y[idx]
+
+    return X, y
+
+
+
+def load_dataset_fappe(file, logloss_opt = False):
+    # read a data file. For a row, the first column goes into Y_;
+    # the other columns become a row in X_ and entries are maped to indexs in self.features
+
+
+    # read feature
+    features = {}
+    i = len(features)
+
+    f = open(file)
+    line = f.readline()
+    while line:
+        items = line.strip().split(' ')
+        for item in items[1:]:
+            if item not in features:
+                features[item] = i
+                i = i + 1
+        line = f.readline()
+    f.close()
+
+    # data_load
+    f = open(file)
+    X_ = []
+    Y_ = []
+    Y_for_logloss = []
+    line = f.readline()
+    while line:
+        items = line.strip().split(' ')
+        Y_.append(1.0 * float(items[0]))
+
+        if float(items[0]) > 0:  # > 0 as 1; others as 0
+            v = 1.0
+        else:
+            v = 0.0
+        Y_for_logloss.append(v)
+        X_.append([features[item] for item in items[1:]])
+        line = f.readline()
+    f.close()
+
+    #print(X_)
+    #print(Y_)
+
+    Data_Dic = {}
+    X_lens = [len(line) for line in X_]
+    indexs = np.argsort(X_lens)
+    if logloss_opt == True :
+        Data_Dic['Y'] = [Y_for_logloss_[i] for i in indexs]
+        Data_Dic['X'] = [X_[i] for i in indexs]
+    else :
+        Data_Dic['Y'] = [Y_[i] for i in indexs]
+        Data_Dic['X'] = [X_[i] for i in indexs]
+    return np.asarray(Data_Dic['X']),np.asarray(Data_Dic['Y'])
+
+
+
 if __name__ == "__main__" :
     
-    filename = './data/YearPredictionMSD/YearPredictionMSD'
+    #filename = './data/YearPredictionMSD/YearPredictionMSD'
     #filename = './YearPredictionMSD_test'
     #X, y = load_dataset_YearPredictionMSD(filename)
 
-    #print(X)
-    # nbUsers = 943
-    # nbMovies = 1682
-    # nbFeatures = nbUsers + nbMovies
-    # nbRatingsTrain = 90570
-    # nbRatingsTest = 9430
-    #
-    # data_dir = './Data/ml-100k/'
-    # filename1, filename2 = 'ub.base', './ub.test'
-    #
-    #
-    # # load dataset
-    # x_train, y_train, rate_train, timestamp_train = load_dataset(data_dir + filename1, nbRatingsTrain, nbFeatures, nbUsers)
-    #
-    # # sort dataset in time
-    # x_train_s, rate_train_s, _ = sort_dataset(x_train, rate_train, timestamp_train)
-    #
-    #
-    # # sparse to dense
-    # inputs_matrix = torch.tensor(x_train_s.todense()).double()
-    # outputs = torch.tensor(rate_train_s).double()
-    #
-    #
-    #
-    # # model setup
-    # options = {}
-    # options['m']  = 20
-    # options['eta'] = 5e-2
-    # options['task'] = 'reg'
-    #
-    # #print(inputs_matrix)
-    #
-    #
-    # recent_num = 1000
-    #
-    # Model = SFTRL(inputs_matrix[:recent_num,:],outputs[:recent_num],options)
-    # #alpha = torch.tensor(np.random.randn(10,1))
-    # pred,real = Model.online_learning()
+    filename = './data/frappe/frappe.train.libfm'
+    Dataset = load_dataset_fappe(filename, logloss_opt=False)
 
-    # plt.figure()
-    # plt.plot(pred,'b.')
-    # plt.plot(real,'r.')
-    # plt.savefig('./demo.png')
-    # plt.show()
+    print(Dataset['Y'])

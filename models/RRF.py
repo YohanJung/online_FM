@@ -44,7 +44,7 @@ class RRF(object):
     def _init(self):
         self.epoch = 0
         self.history = None
-        self.num_classes = 0
+        self.num_classes = 2
         self.label_encoder = None
         self.start_time = 0.0
         self.train_time = 0.0
@@ -105,10 +105,13 @@ class RRF(object):
             wx = phi.dot(self.w)  # (x,)
             if self.task == 'classification':
                 if self.num_classes == 2:
-                    y_pred = np.uint8(wx >= 0)
+                    #y_pred = 1/( 1 + np.exp(-wx)) - 0.5
+                    y_pred = 1.0 if wx >= 0 else -1.0
                 else:
                     y_pred = np.argmax(wx)
+
                 mistake += (y_pred != y[t])
+                mistake2.append(y_pred)
             else:
                 mistake += (wx[0] - y[t]) ** 2
                 mistake2.append(wx[0])
@@ -124,6 +127,7 @@ class RRF(object):
 
         return np.asarray(mistake2).reshape([-1,1])
 
+
     def _get_wxy(self, wx, y):
         m = len(y)  # batch size
         idx = range(m)
@@ -132,6 +136,7 @@ class RRF(object):
         z = np.argmax(wx[mask].reshape([m, self.num_classes - 1]), axis=1)
         z += (z >= y)
         return wx[idx, y] - wx[idx, z], z
+
 
     def _get_phi(self, x, **kwargs):
         gamma = kwargs['gamma'] if 'gamma' in kwargs else self.gamma_
@@ -142,6 +147,7 @@ class RRF(object):
         phi[:, :self.D] = np.cos(xo)
         phi[:, self.D:] = np.sin(xo)
         return phi
+
 
     def get_gamma_grad(self, x, phi, dphi, *args, **kwargs):
         gamma = kwargs['gamma'] if 'gamma' in kwargs else self.gamma_  # (N,)

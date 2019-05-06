@@ -1,6 +1,7 @@
 import torch
 from torch.nn import Module
 #from torch.autograd import Variable
+from models.FM_Base import FM_Base
 
 import numpy as np
 
@@ -12,23 +13,10 @@ tensor_type = torch.DoubleTensor
 
 
 
-class SFTRL_CCFM(Module):
+class SFTRL_CCFM(FM_Base):
 
     def __init__(self, inputs_matrix, outputs, option):
-
-        super(SFTRL_CCFM, self).__init__()
-
-
-        self.At = inputs_matrix.t()
-        self.b = outputs
-        self._thres = 1e-12
-
-        self.num_data = inputs_matrix.shape[0]
-        self.num_feature = inputs_matrix.shape[1]
-
-        self.task = option['task']
-        self.eta = option['eta']
-        self.m = option['m']
+        super(SFTRL_CCFM, self).__init__(inputs_matrix, outputs, option)
 
         self.row_count_p = 0
         self.row_count_n = 0
@@ -36,32 +24,6 @@ class SFTRL_CCFM(Module):
         self.BT_P = tensor_type(np.zeros([self.num_feature, 2*self.m]))
         self.BT_N = tensor_type(np.zeros([self.num_feature, 2*self.m]))
 
-
-
-    def _loss(self, x):
-
-        if self.task == 'reg' :
-            return x**2
-        elif self.task == 'cla':
-            return 1 / (1 + torch.exp(x))
-        else :
-            return
-
-
-    def _grad_loss(self, x):
-
-        if self.task == 'reg' :
-            return 2*x
-        elif self.task == 'cla' :
-            return -1 / (1 + torch.exp(x))
-        else :
-            return
-
-
-
-    def _predict(self):
-
-        return
 
     def online_learning(self):
 
@@ -73,12 +35,12 @@ class SFTRL_CCFM(Module):
 
             BP_alpha = self.BT_P.t().matmul(alpha)
             BN_alpha = self.BT_N.t().matmul(alpha)
-
-            scalar = (BP_alpha.t().matmul(BP_alpha) - BN_alpha.t().matmul(BN_alpha)).squeeze()
+            scalar = self._predict( (BP_alpha.t().matmul(BP_alpha) - BN_alpha.t().matmul(BN_alpha)).squeeze() )
 
 
             if self.task == 'cls':
-                sign_idx = self._grad_loss(scalar * self.b[idx]) * self.b[idx]
+                #sign_idx = self._grad_loss(scalar * self.b[idx])*(self.b[idx])
+                sign_idx = self._grad_loss(scalar * self.b[idx]).mul(self.b[idx])
             elif self.task == 'reg':
                 sign_idx = self._grad_loss(scalar - self.b[idx])
             else:
@@ -91,8 +53,9 @@ class SFTRL_CCFM(Module):
             real_list.append(self.b[idx])
 
             if idx % 100 == 0:
-                print(' %d th : pred %f , real %f , loss %f ' % (
-                idx, scalar, self.b[idx], self._loss(scalar - self.b[idx])))
+                # print(' %d th : pred %f , real %f , loss %f ' % (
+                # idx, scalar, self.b[idx], self._loss(scalar - self.b[idx])))
+                print(' %d th : pred %f , real %f ' % (idx, scalar, self.b[idx], ))
 
 
         # return torch.tensor(pred_list).reshape([-1,1]).double(),\

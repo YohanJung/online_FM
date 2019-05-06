@@ -15,11 +15,22 @@ def regression_metric(pred,real):
     return metric
 
 
-def classfication_metric():
-    return
+def classfication_metric(pred,real):
+    val = 0.0
+    metric = [np.inf]
+    metric_cnt = [np.inf]
+    for idx,(pred_idx,real_idx) in enumerate(zip(pred,real)):
+        val += 1 if pred_idx == real_idx else 0
+        metric.append( 1/(idx + 1)* np.log( 1.0 + np.exp(-pred_idx*real_idx) )    )
+        metric_cnt.append( 1/(idx + 1)*val )
+    metric = np.asarray(metric).reshape([-1,1])
+    metric_cnt = np.asarray(metric_cnt).reshape([-1, 1])
+
+    return metric,metric_cnt
 
 
-def fig_prediction(pred,model_name,real,option,save_path):
+
+def fig_prediction(pred, model_name ,real, option, save_path):
     plt.figure(figsize=(10,5))
     for (c_pred,model_name) in zip(pred,model_name):
         plt.plot(c_pred,'.',label = model_name ,alpha = 0.5)
@@ -27,7 +38,10 @@ def fig_prediction(pred,model_name,real,option,save_path):
 
     plt.xlabel('iteration')
     plt.ylabel('rating')
-    plt.ylim([0.0 - 0.1 , 6.0 + .1])
+    # if ylim_siz is not None:
+    #     plt.ylim(ylim_siz)
+    # if xlim_siz is not None:
+    #     plt.xlim(xlim_siz)
     plt.legend()
     plt.title(option['Data'] + ' prediction' + ' eta_' + str(option['eta']))
     plt.savefig(save_path + time.ctime().replace(' ','_').replace(':','-') +'.png')
@@ -37,105 +51,47 @@ def fig_prediction(pred,model_name,real,option,save_path):
     return
 
 
-def fig_metric(metric,model_name,option,save_path):
+def fig_metric_reg(metric,model_name,option,save_path):
     assert(isinstance(metric,list) and isinstance(model_name,list) )
 
     plt.figure(figsize=(10,5))
     for (c_model_metric,c_model_name) in zip(metric,model_name):
         plt.plot(c_model_metric,label = c_model_name ,alpha = 0.9)
 
-
     plt.legend()
     plt.xlabel('iteration')
     plt.ylabel('mean of accumulated loss')
     plt.title(option['Data'] + ' metric' + ' eta_' + str(option['eta']))
     plt.savefig(save_path + time.ctime().replace(' ','_').replace(':','-')+'.png')
     plt.show()
-    print('metric_reg saved as following path :' + save_path + time.ctime().replace(' ','_').replace(':','-') +'.png ')
+    print('metric saved as following path :' + save_path + time.ctime().replace(' ','_').replace(':','-') +'.png ')
     return
 
 
+def fig_metric_cls(metric, metric_cnt, model_name, option, save_path):
+    assert (isinstance(metric, list) and isinstance(model_name, list))
 
-def fig_prediction2(pred,model_name,real,option,save_path):
-    plt.figure(figsize=(10,5))
-    for (c_pred,model_name) in zip(pred,model_name):
-        plt.plot(c_pred,'.',label = model_name ,alpha = 0.5)
-    plt.plot(real,'k.',label = 'real')
-
-    plt.xlabel('iteration')
-    plt.ylabel('rating')
-    plt.ylim([-5.0 - 0.1 , 5.0 + .1])
+    plt.figure(figsize=(10, 5))
+    for (c_model_metric, c_model_name) in zip(metric, model_name):
+        plt.plot(c_model_metric, label=c_model_name, alpha=0.9)
     plt.legend()
-    plt.title(option['Data'] + ' prediction' + ' eta_' + str(option['eta']))
-    plt.savefig(save_path + time.ctime().replace(' ','_').replace(':','-') +'.png')
+    plt.xlabel('iteration')
+    plt.ylabel('mean of accumulated loss')
+    plt.title(option['Data'] + ' metric' + ' eta_' + str(option['eta']))
+    plt.savefig(save_path + time.ctime().replace(' ', '_').replace(':', '-') + '.png')
     plt.show()
+    print('metric cls saved as following path :' + save_path + time.ctime().replace(' ', '_').replace(':', '-') + '.png ')
 
-    print('regression results saved as following path :' + save_path + time.ctime().replace(' ','_').replace(':','-') +'.png ')
-    return
-
-
-def fig_metric2(metric,model_name,option, save_path):
-    assert(isinstance(metric,list) and isinstance(model_name,list) )
-
-    plt.figure(figsize=(10,5))
-    for (c_model_metric,c_model_name) in zip(metric,model_name):
-        plt.plot(c_model_metric[1:],label = c_model_name ,alpha = 0.9)
+    plt.figure(figsize=(10, 5))
+    for (c_model_metric, c_model_name) in zip(metric_cnt, model_name):
+        plt.plot(c_model_metric, label=c_model_name, alpha=0.9)
 
     plt.legend()
     plt.xlabel('iteration')
     plt.ylabel('mean of accumulated loss')
     plt.title(option['Data'] + ' metric' + ' eta_' + str(option['eta']))
-    plt.savefig(save_path + time.ctime().replace(' ','_').replace(':','-')+'.png')
+    plt.savefig(save_path + 'cnt_'+ time.ctime().replace(' ', '_').replace(':', '-')  + '.png')
     plt.show()
-    print('metric_reg saved as following path :' + save_path + time.ctime().replace(' ','_').replace(':','-') +'.png ')
-    return
+    print('metric cls cnt saved as following path :' + save_path + time.ctime().replace(' ', '_').replace(':', '-') + '.png ')
 
-
-def fig_prediction3(pred,model_name,real,option,save_path):
-    plt.figure(figsize=(10,5))
-    for (c_pred,model_name) in zip(pred,model_name):
-        plt.plot(c_pred,'.',label = model_name ,alpha = 0.5)
-    plt.plot(real,'k.',label = 'real')
-
-    plt.xlabel('iteration')
-    plt.ylabel('rating')
-    plt.ylim([1950 - 0.1 , 2050 + .1])
-    plt.legend()
-    plt.title(option['Data'] + ' prediction' + ' eta_' + str(option['eta']))
-    plt.savefig(save_path + time.ctime().replace(' ','_').replace(':','-') +'.png')
-    plt.show()
-
-
-def fig_prediction2(pred,model_name,real,option,save_path):
-    plt.figure(figsize=(10,5))
-    for (c_pred,model_name) in zip(pred,model_name):
-        plt.plot(c_pred,'.',label = model_name ,alpha = 0.5)
-    plt.plot(real,'k.',label = 'real')
-
-    plt.xlabel('iteration')
-    plt.ylabel('rating')
-    plt.ylim([-5.0 - 0.1 , 5.0 + .1])
-    plt.legend()
-    plt.title(option['Data'] + ' prediction' + ' eta_' + str(option['eta']))
-    plt.savefig(save_path + time.ctime().replace(' ','_').replace(':','-') +'.png')
-    plt.show()
-    print('regression results saved as following path :' + save_path + time.ctime().replace(' ','_').replace(':','-') +'.png ')
-    return
-
-
-def fig_metric3(metric,model_name,option,save_path):
-    assert(isinstance(metric,list) and isinstance(model_name,list) )
-    plt.figure(figsize=(10,5))
-    for (c_model_metric,c_model_name) in zip(metric,model_name):
-        plt.plot(c_model_metric[1:],label = c_model_name ,alpha = 0.9)
-
-    #plt.ylim([-5.0 - 0.1 , 250.0 + .1])
-    #plt.xlim([2000.0 - 0.1 , 12000 + .1])
-    plt.legend()
-    plt.xlabel('iteration')
-    plt.ylabel('mean of accumulated loss')
-    plt.title(option['Data'] + ' metric' + ' eta_' + str(option['eta']))
-    plt.savefig(save_path + time.ctime().replace(' ','_').replace(':','-')+'.png')
-    plt.show()
-    print('metric_reg saved as following path :' + save_path + time.ctime().replace(' ','_').replace(':','-') +'.png ')
     return
