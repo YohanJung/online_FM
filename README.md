@@ -13,6 +13,7 @@ cod-rna - https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/ <br/>
 YearPredictionMSD - https://archive.ics.uci.edu/ml/datasets/yearpredictionmsd/ <br/>
 ### classfication task <br/>
 cod-rna - https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/ <br/>
+Frappe - https://github.com/hexiangnan/neural_factorization_machine/tree/master/data/frappe/ <br/>
     
    
 
