@@ -13,6 +13,7 @@ import matplotlib
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 
+
 def load_dataset_movielens(filename, lines, columns , nbUsers):
     # Features are one-hot encoded in a sparse matrix
     X = lil_matrix((lines, columns)).astype('float32')
@@ -42,31 +43,26 @@ def load_dataset_movielens(filename, lines, columns , nbUsers):
 
     date_time = np.array(date_time).astype('float32')
     Y = np.array(Y).astype('float64')
-    return X,X2 , Y, Y2, date_time
+    return X, X2 , Y, Y2, date_time
 
 
 
 def sort_dataset_movielens(X,Y,utc_time_stamp):
 
     # make up some data
+    #time_order = np.array([datetime.utcfromtimestamp(current_utc) for current_utc in utc_time_stamp])
     time_order = np.array([datetime.utcfromtimestamp(current_utc) for current_utc in utc_time_stamp])
-
-    #x = np.array([datetime.utcfromtimestamp(current_utc) for current_utc in timestamp_train])
     Y = np.array([float(i) for i in Y])
 
     sorted_X = X[time_order.argsort()]
     sorted_Y = Y[time_order.argsort()]
-
     return sorted_X,sorted_Y,time_order
-
-
 
 
 
 def load_dataset_YearPredictionMSD(dataname, isTransformY=False, isRemoveEmpty=False):
     # filename = home_dir + 'Resource/' + dataname
     X, y = load_svmlight_file(dataname)
-
     X = np.asarray(X.todense())
     n, d = X.shape
     print('Size of X is ' + str(n) + '-by-' + str(d))
@@ -89,7 +85,6 @@ def load_dataset_YearPredictionMSD(dataname, isTransformY=False, isRemoveEmpty=F
 def load_dataset_fappe(file, logloss_opt = False):
     # read a data file. For a row, the first column goes into Y_;
     # the other columns become a row in X_ and entries are maped to indexs in self.features
-
 
     # read feature
     features = {}
@@ -125,19 +120,23 @@ def load_dataset_fappe(file, logloss_opt = False):
         line = f.readline()
     f.close()
 
-    #print(X_)
-    #print(Y_)
-
     Data_Dic = {}
     X_lens = [len(line) for line in X_]
     indexs = np.argsort(X_lens)
-    if logloss_opt == True :
-        Data_Dic['Y'] = [Y_for_logloss_[i] for i in indexs]
-        Data_Dic['X'] = [X_[i] for i in indexs]
-    else :
-        Data_Dic['Y'] = [Y_[i] for i in indexs]
-        Data_Dic['X'] = [X_[i] for i in indexs]
+
+    # if logloss_opt == True :
+    #     Data_Dic['Y'] = [Y_for_logloss[i] for i in indexs]
+    #     Data_Dic['X'] = [X_[i] for i in indexs]
+    # else :
+    #     Data_Dic['Y'] = [Y_[i] for i in indexs]
+    #     Data_Dic['X'] = [X_[i] for i in indexs]
+
+    Data_Dic['Y2'] = [Y_for_logloss[i] for i in indexs]
+    Data_Dic['Y'] = [Y_[i] for i in indexs]
+    Data_Dic['X'] = [X_[i] for i in indexs]
+
     return np.asarray(Data_Dic['X']),np.asarray(Data_Dic['Y'])
+    #return np.asarray(Data_Dic['X']),np.asarray(Data_Dic['Y']),np.asarray(Data_Dic['Y2'])
 
 
 

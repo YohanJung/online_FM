@@ -56,7 +56,7 @@ def fig_prediction(pred, model_name ,real, option, save_path):
         plt.plot(real,'k.',label = 'real' ,alpha = 0.4)
         plt.xlabel('iteration')
         plt.ylabel('rating')
-    
+
         #plt.ylim([1900,2100])
         plt.legend()
         plt.title(option['Data'] + ' prediction' + ' eta_' + str(option['eta']))

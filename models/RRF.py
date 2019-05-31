@@ -125,7 +125,7 @@ class RRF(object):
 
         return np.asarray(mistake2).reshape([-1,1])
 
-
+    # for multidiemsnional classficiation > 2
     def _get_wxy(self, wx, y):
         m = len(y)  # batch size
         idx = range(m)

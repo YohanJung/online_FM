@@ -1,3 +1,4 @@
+import time
 import torch
 from torch.nn import Module
 #from torch.autograd import Variable
@@ -13,9 +14,10 @@ tensor_type = torch.DoubleTensor
 
 class SFTRL_Vanila(FM_Base):
 
-    def __init__(self, inputs_matrix, outputs, option):        
-        super(SFTRL_Vanila, self).__init__(inputs_matrix, outputs, option)
+    def __init__(self, inputs_matrix, outputs, task, learning_rate, num_feature):
+        super(SFTRL_Vanila, self).__init__(inputs_matrix, outputs,  task, learning_rate, num_feature)
 
+        self.model_name = "SFTRL_Vanila"
         self.row_count_p = 0
         self.row_count_n = 0
 
@@ -27,7 +29,11 @@ class SFTRL_Vanila(FM_Base):
 
 
 
-    def online_learning(self):
+    def online_learning(self,logger):
+        start = time.time()
+        logger.info("==" * 20)
+        logger.info(self.model_name + '_' + str(self.eta) + '_' + str(self.m)  + '_start')
+
         pred_list = []
         real_list = []
         for idx in range(self.num_data):
@@ -36,7 +42,12 @@ class SFTRL_Vanila(FM_Base):
             BP_alpha = self.BT_P.t().matmul(alpha[:-1]).unsqueeze(1)
             BN_alpha = self.BT_N.t().matmul(alpha[:-1]).unsqueeze(1)
 
-            scalar =  self._predict(self.w.t().matmul(alpha) + BP_alpha.t().matmul(BP_alpha) - BN_alpha.t().matmul(BN_alpha) )
+            scalar,pred =  self._predict(self.w.t().matmul(alpha) + BP_alpha.t().matmul(BP_alpha) - BN_alpha.t().matmul(BN_alpha) )
+            if torch.isnan(scalar):
+                logger.info('Nan contained')
+                raise ValueError('Nan contained')
+
+
             if self.task == 'cls':
                 sign_idx = self._grad_loss(scalar * self.b[idx]) * self.b[idx]
             elif self.task == 'reg':
@@ -50,17 +61,18 @@ class SFTRL_Vanila(FM_Base):
 
             self._GFD(sign_idx, alpha[:-1])
 
-            pred_list.append(torch.tensor(scalar).double())
+            pred_list.append(pred)
             real_list.append(self.b[idx])
 
 
-            if idx % 100 == 0:
-                # print(' %d th : pred %f , real %f , loss %f ' % (
-                # idx, scalar, self.b[idx], self._loss(scalar - self.b[idx])))
-                print(' %d th : pred %f , real %f ' % (idx, scalar, self.b[idx], ))
+            if idx % 1000 == 0:
+                logger.info(' %d th : pred %f , real %f ' % (idx, pred, self.b[idx], ))
+                print(' %d th : pred %f , real %f ' % (idx, pred, self.b[idx], ))
 
+        end = time.time()
+        logger.info('learning time : %f ' % (end-start))
 
-        return np.asarray(pred_list),np.asarray(real_list)
+        return np.asarray(pred_list),np.asarray(real_list),(end-start)
 
 
 

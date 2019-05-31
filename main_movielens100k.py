@@ -20,7 +20,10 @@ if __name__ == "__main__":
     filename1, filename2 = 'ua.base', './ua.test'
 
     # load dataset
-    _, x_train, y_train, rate_train, timestamp_train = load_dataset_movielens(data_dir + filename1, nbRatingsTrain, nbFeatures, nbUsers)
+    _, x_train, y_train, rate_train, timestamp_train = load_dataset_movielens(data_dir + filename1, 
+                                                                              nbRatingsTrain,
+                                                                              nbFeatures,
+                                                                              nbUsers)
     # sort dataset in time
     #x_train_s, rate_train_s, _ = sort_dataset(x_train, rate_train, timestamp_train)
     x_train_s, rate_train_s, _ = sort_dataset_movielens(x_train, rate_train, timestamp_train)
@@ -44,7 +47,7 @@ if __name__ == "__main__":
             learning_rate_gamma=0.001, gamma = 1.0, D = 50)
     pred_RRF = c.fit(x_train_s.todense()[0:x_train_s.todense().size:down_sampling], rate_train_s[0:x_train_s.todense().size:down_sampling])
 
-
+    #print(type(x_train_s))
 
     # sparse to dense
     inputs_matrix = torch.tensor(x_train_s[0:x_train_s.size:down_sampling].todense()).double()
@@ -104,7 +107,7 @@ if __name__ == "__main__":
     save_path1 = './figure_results/movielens/pred_reg_'
     save_path2 = './figure_results/movielens/metric_reg_'
     save_legend = ['SFTRL_CCFM', 'SFTRL_Vanila','RRF']
-    fig_prediction([pred_C,pred_V,pred_RRF],save_legend,real,options,save_path1)
+    fig_prediction([pred_C,pred_V,pred_RRF],save_legend,real,options,save_path1) 
     fig_metric_reg([reg_metric_C,reg_metric_V,reg_metric_RRF], save_legend,options,save_path2)
 
     # save_legend = ['SFTRL_CCFM', 'SFTRL_Vanila','RRF','FM_FTRL']

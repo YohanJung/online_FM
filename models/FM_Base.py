@@ -14,7 +14,7 @@ tensor_type = torch.DoubleTensor
 
 class FM_Base(Module):
 
-    def __init__(self, inputs_matrix, outputs, option):
+    def __init__(self, inputs_matrix, outputs, task, learning_rate, feature_m ):
 
         super(FM_Base, self).__init__()
 
@@ -25,9 +25,9 @@ class FM_Base(Module):
         self.num_data = inputs_matrix.shape[0]
         self.num_feature = inputs_matrix.shape[1]
 
-        self.task = option['task']
-        self.eta = option['eta']
-        self.m = option['m']
+        self.task = task
+        self.eta = learning_rate
+        self.m = feature_m
 
 
 
@@ -53,19 +53,18 @@ class FM_Base(Module):
 
     def _predict(self,scalar):
         if self.task == 'reg' :
-            return scalar
+            return scalar,scalar
         elif self.task == 'cls' :
             if scalar >=0:
-                return 1.0
+                return scalar,torch.tensor([1.0]).type(tensor_type)
             else :
-                return -1.0
+                return scalar,torch.tensor([-1.0]).type(tensor_type)
             #return 1 / (1 + np.exp(-scalar)) - 0.5
         else :
             raise NotImplementedError
             return
 
-
-    def online_learning(self):
+    def online_learning(self,logger):
         raise NotImplementedError
         return
 
