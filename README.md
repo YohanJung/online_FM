@@ -25,7 +25,8 @@ Frappe - https://github.com/hexiangnan/neural_factorization_machine/tree/master/
 /models/SFTRL_Vanila.py  <br/> 
 3. OCCFM - working
 4. RRF <br/>
-/models/RRF_Online.py (refactoring needed in pytorch stytle)   
+/models/RRF.py <br/>
+/models/RRF_Online.py (refactored code in pytorch stytle)  <br/> 
     
 ## Run experiment
 
