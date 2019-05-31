@@ -27,7 +27,7 @@ Frappe - https://github.com/hexiangnan/neural_factorization_machine/tree/master/
 4. RRF <br/>
 /models/RRF_Online.py (refactoring needed in pytorch stytle)   
     
-## run experiment
+## Run experiment
 
 run_bash.sh or run_bach_all.sh (refer to test_argparse.py)
    
