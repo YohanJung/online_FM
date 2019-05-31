@@ -15,7 +15,6 @@ YearPredictionMSD - https://archive.ics.uci.edu/ml/datasets/yearpredictionmsd/ <
 cod-rna - https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/ <br/>
 Frappe - https://github.com/hexiangnan/neural_factorization_machine/tree/master/data/frappe/ <br/>
     
-   
 
 ## Model
 
@@ -26,8 +25,12 @@ Frappe - https://github.com/hexiangnan/neural_factorization_machine/tree/master/
 /models/SFTRL_Vanila.py  <br/> 
 3. OCCFM - working
 4. RRF <br/>
-/models/RRF.py (refactoring needed in pytorch stytle)   
+/models/RRF_Online.py (refactoring needed in pytorch stytle)   
+    
+## Run experiment
 
+run_bash.sh or run_bach_all.sh (test_argparse.py)
+   
     
 ## Reference paper
 
