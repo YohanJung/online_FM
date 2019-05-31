@@ -21,12 +21,12 @@ Frappe - https://github.com/hexiangnan/neural_factorization_machine/tree/master/
 1. FM + FTRL <br/>
 /models/FM_FTRL.py
 2. SFTRL <br/>
-/models/SFTRL_CCFM.py   <br/>
-/models/SFTRL_Vanila.py  <br/> 
+/models/SFTRL_CCFM.py (refactored code by pytorch)  <br/>
+/models/SFTRL_Vanila.py (refactored code by pytorch)  <br/> 
 3. OCCFM - working
 4. RRF <br/>
 /models/RRF.py <br/>
-/models/RRF_Online.py (refactored code in pytorch stytle)  <br/> 
+/models/RRF_Online.py (refactored code by pytorch)  <br/> 
     
 ## Run experiment
 
