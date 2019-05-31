@@ -81,13 +81,12 @@ class FM_FTRL(FM_Base):
             g_w1 += sign_idx*alpha
             g_W2 += 2*self.W2.matmul(alpha[:-1]).matmul(alpha[:-1].t())
 
-
             self.w1 = -self.eta*g_w1
             self.W2 = -self.eta*g_W2
 
+
             pred_list.append(pred)
             real_list.append(self.b[idx])
-
             if idx % 1000 == 0:
                 logger.info(' %d th : pred %f , real %f ' % (idx, pred, self.b[idx], ))
                 print(' %d th : pred %f , real %f ' % (idx, pred, self.b[idx], ))

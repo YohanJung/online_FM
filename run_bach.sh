@@ -45,15 +45,6 @@
 ####################################################################################################################
 
 
-
-
-
-
-
-
-
-
-
 # over codrna
 #python3 test_argparse.py --num_exp=1 --dataset=codrna --model=RRF --task=cls --RRF_gamma_list 0.01 0.1 1. --lr_RRF_w_list 0.001 0.005 0.01 --lr_RRF_gamma_list 0.001 0.005 0.01 --RRF_num_sample_spectral_list 10 20 30 50&
 
