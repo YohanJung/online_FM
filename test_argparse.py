@@ -437,8 +437,9 @@ def _result_experiment(result_dict,result_time_dict,args,single_model_name):
 
 
 if __name__ == "__main__":
-    x_train_s, y_train_s = _load_collection_data(args.dataset , down_sampling = 1, want_permute = False)
 
+    x_train_s, y_train_s = _load_collection_data(args.dataset , down_sampling = 1, want_permute = False)
+    
     if args.purpose == 'sep':
         result_pred_dict,result_time_dict = _run_exp_single_model(args,args.model,x_train_s,y_train_s)
         _result_experiment(result_pred_dict, result_time_dict, args, args.model)
@@ -449,46 +450,3 @@ if __name__ == "__main__":
         pass
 
 
-
-
-
-
-   # # prediction task figure
-   #  fig = plt.figure(figsize = (8,4))
-   #  for i_th_result_dict in result_dict:
-   #      #print(result_dict[i_th_result_dict])
-   #      if torch.is_tensor(result_dict[i_th_result_dict]):
-   #          plt.plot(result_dict[i_th_result_dict].data.numpy()  ,'.' , label = i_th_result_dict ,alpha = 0.5)
-   #      else :
-   #          plt.plot(result_dict[i_th_result_dict] , '.', label=i_th_result_dict ,alpha = 0.5)
-   #
-   #  #plt.legend(loc = 'best')
-   #  #plt.legend(bbox_to_anchor=(1,0) , loc='lower right' ,  bbox_transform=fig.transFigure , ncol = 2)
-   #  #plt.legend(bbox_to_anchor=(1,0) , loc='lower center' ,  bbox_transform=fig.transFigure , ncol = len(result_dict))
-   #  plt.legend(loc='lower center', bbox_to_anchor=(0.5,-0.05) , bbox_transform=fig.transFigure, ncol= int(len(result_dict)/2) , )
-   #  plt.show()
-   #  print(args.fig_save_dir + args.model + 'learning_rate_comparison' +'.png')
-   #  plt.savefig(args.fig_save_dir + args.model + 'learning_rate_comparison' +'.png', bbox_inches="tight")
-   #
-   #
-   #  fig = plt.figure(figsize = (8,4))
-   #  # performance task figure
-   #  if args.task == "cls" :
-   #      for i_th_result_dict in result_dict:
-   #          if i_th_result_dict is not 'real':
-   #              _,metric_cnt = classfication_metric(result_dict[i_th_result_dict] , result_dict['real'])
-   #              plt.plot(metric_cnt , label=i_th_result_dict, alpha=0.5)
-   #  elif args.task == "reg":
-   #      for i_th_result_dict in result_dict:
-   #          if i_th_result_dict is not 'real':
-   #              metric = regression_metric(result_dict[i_th_result_dict] , result_dict['real'])
-   #              plt.plot(metric, label=i_th_result_dict, alpha=0.5)
-   #
-   #  else :
-   #      raise ValueError('not implemented')
-   #
-   #  plt.legend(loc='lower center', bbox_to_anchor=(0.5,-0.05) , bbox_transform=fig.transFigure, ncol= int(len(result_dict)/2)  )
-   #  plt.show()
-   #  print(args.fig_save_dir + args.model +'metric_over_learning_rate' +'.png')
-   #  plt.savefig(args.fig_save_dir + args.model + 'metric_over_learning_rate' +'.png', bbox_inches="tight")
-   #
